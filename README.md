@@ -1,7 +1,7 @@
 Projet Poly#
 ============
 
-Surfez sur un réseau wifi doté d'une couverture parfaite dans votre bar préféré.
+Surfez sur un réseau wifi doté d'une couverture parfaite dans votre bar préféré!
 
 L'équipe
 ===========
