@@ -1,0 +1,42 @@
+def case_couvertes(matrice,coordX,coordY,rayon_routeur):
+    liste_case_couvertes=[]
+    largeurM = coordX - int(rayon_routeur/2)                #on cacule les postion dont on aura besoin
+    largeurP = coordX + int(rayon_routeur/2)
+    longueurM = coordY - int(rayon_routeur/2)
+    LongueurP = coordY + int(rayon_routeur/2)
+
+    if largeurM<0:                                          #on s'assure que l'on reste bien dans la matrice
+        largeurM=0                                          #évite d'avoir à tester si la case est utilisable
+    if longueurM<0:
+        longueurM=0
+    if largeurP>len(matrice):
+        largeurP=len(matrice)
+    if LongueurP>len(matrice):
+        LongueurP=len(matrice)
+
+    for i in range(largeurM,largeurP):                      #on teste toutes les cases qui sont dans le rayon du routeur
+        if i<=coordX:
+            basL = i
+            hautL = coordX
+        else:
+            basL = coordX
+            hautL = i
+        for k in range(longueurM,LongueurP):
+            if matrice[i][k] == ".":                        #on teste si la case peut recevoir du wifi (ne teste pas les cases déja couvertes)
+                presence_de_mur = False                     #si oui on prépare la vérification de présence de mur
+                if k<=coordY:
+                    basH = k
+                    hautH = coordY
+                else:
+                    basH = coordY
+                    hautH = k
+
+                    for l in range(basL,hautL):             #si la case est a tester on parcour toutes les cases du carrés formé et on teste si il y un mur dedans
+                        for m in range(basH,hautH):
+                            if matrice[l][m]=="#":
+                                presence_de_mur = True
+
+            if presence_de_mur==False:                      #si il n'y a pas de mur on ajoute la case au cases couverte par le wifi
+                liste_case_couvertes.append([i,k])
+
+    return(liste_case_couvertes)
