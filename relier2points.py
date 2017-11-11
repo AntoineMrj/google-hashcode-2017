@@ -70,5 +70,5 @@ def relier2points(point1, point2):
     
 
 if __name__=='__main__':
-    points = relier((1,5),(3,0))
+    points = relier2points((1,5),(3,0))
     print(points)
