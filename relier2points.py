@@ -5,7 +5,7 @@ Created on Sat Oct 28 15:59:02 2017
 @author: Antoine
 """
 
-def relier(point1, point2):
+def relier2points(point1, point2):
     """
     Retourne le chemin le plus court pour relier 2 points dans une matrice donnée
     sous forme d'une liste de couple de coordonnées (x,y)
