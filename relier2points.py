@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # -*- coding: utf-8 -*-
 """
 Created on Sat Oct 28 15:59:02 2017
@@ -73,6 +74,8 @@ def relier2points(point1, point2):
 if __name__=='__main__':
     points = relier2points((1,5),(3,0))
 =======
+=======
+>>>>>>> 55ff5a68429f593d75dd89b37ea088f5a5e45920
 # -*- coding: utf-8 -*-
 """
 Created on Sat Oct 28 15:59:02 2017
@@ -146,5 +149,8 @@ def relier2points(point1, point2):
 
 if __name__=='__main__':
     points = relier2points((1,5),(3,0))
+<<<<<<< HEAD
+>>>>>>> 55ff5a68429f593d75dd89b37ea088f5a5e45920
+=======
 >>>>>>> 55ff5a68429f593d75dd89b37ea088f5a5e45920
     print(points)
