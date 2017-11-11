@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+
+#-------------------------------------------------------------------------------
+# Purpose: renvoie les cases couvertes (sans prendre en compte les cases déjà couvertes)
+# Author:      Bastien
+# Created:    10/11/2017
+#-------------------------------------------------------------------------------
+
+from lecture_entete import *
+
 def cases_couvertes(matrice, coordX_routeur, coordY_routeur, radius, largeur_matrice, hauteur_matrice):
 	#matrice de travail
     map_travail = matrice
@@ -92,3 +102,25 @@ def cases_couvertes(matrice, coordX_routeur, coordY_routeur, radius, largeur_mat
 
     #fin
     return liste_cases_couvertes
+    
+    
+if __name__ == '__main__':
+    #nom du fichier de la map
+    file_str = "map0.in"
+
+    #on crée la matrice
+	matrice = creationMatrice(file_str)
+
+	#bel affichage de la matrice
+	for i in range (0, len(matrice)):   #on parcours la totalité des lignes de la matrice
+	    for j in range(0, len(matrice[i])): #on parcours la totalité du noimbre de colonnes de la matrice
+	        print(matrice[i][j], end="")    #on affiche l'élément sans retour à la ligne
+	    print() #on affiche un retour à la ligne
+
+	print() #on affiche un retour à la ligne
+
+    #calcul des cases couvertes pour un routeur en 2, 2 et un rayon de 3
+	cases_couv = cases_couvertes(matrice, 2, 2, 3, 16, 7)
+
+    #on affiche la liste des cases
+	print(cases_couv)
