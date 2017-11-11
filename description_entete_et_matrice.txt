@@ -1,0 +1,13 @@
+Ordre des informations dans listes retournée pour l'entête :
+- [0] : nombre de ligne
+- [1] : nombre de colonne
+- [2] : portée d'un routeur
+- [3] : prix d'un fil
+- [4] : prix d'un routeur
+- [5] : budget maximum
+- [6] : coordonnée Y du Backbone
+- [7] : coordonnée X du Backbone
+
+Construction de la matrice retournée :
+- matrice = [[ligne 1], [ligne 2], [ligne 3], [ligne 4], etc...]
+- exemple : pour le 5ème caractère de la 12ème ligne : car = matrice[12][5]
