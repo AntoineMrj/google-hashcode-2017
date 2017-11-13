@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 #-------------------------------------------------------------------------------
-# Purpose: Placer le routeur / Main
-# Author:      Guilllaume / Groupe
-# MAJ:     13/11/2017
+# Purpose: Placer le routeur
+# Author:      Guilllaume
+# MAJ:     10/11/2017
 #-------------------------------------------------------------------------------
-
+import numpy as np
 
 def lectureEntete(file_link):
 	fichier_map = open(file_link, "r")  #on ouvre le fichier à lire en mode lecture
@@ -162,21 +162,34 @@ def cases_couvertes(matrice, coordX_routeur, coordY_routeur, radius, largeur_mat
 
 
 
+
 def placement_routeurV1(plan,data):
 	map_travail=plan
 	liste_routeur=[]
-	budget = int(data[5])
-	hauteur_map = int(data[0])
-	largeur_map = int(data[1])
+	budget = int(data[5])			
+	hauteur_map = int(data[0])		
+	largeur_map = int(data[1])		
 	perim_routeur = int(data[2])
 	prix_routeur = int(data[4])
-	taillemap = hauteur_map*largeur_map
+	taillemap = hauteur_map*largeur_map		
 	cout=0
-	while budget-cout>=0:
+	passage = 0
+	case_restante = 0
+	
+#on calcule le nombre de case à couvrir
+	for i in range(hauteur_map):
+		for k in range(largeur_map):
+			if map_travail[i][k] == '.':
+				case_restante=case_restante+1
+	print("Case à couvrir :",case_restante," Budget :",budget)	
+
+#Tant que l'on a du budget ou qu'il reste des case à couvrir on fait le test
+	while budget-cout>prix_routeur and case_restante> 0:
 		temoin=0
 		temoin2=0
-		liste_score_routeur=[]  #Tant que l'on a du budget on effectue le test
-		for i in range(hauteur_map):  #On test chaque case de la matrice
+		liste_score_routeur=[] 
+		#On test chaque case de la matrice
+		for i in range(hauteur_map):
 			coordY=i
 			for k in range(largeur_map):
 				coordX=k
@@ -187,8 +200,12 @@ def placement_routeurV1(plan,data):
 					print(temoin2*1000,"/",taillemap," cases traitées")
 #				print("coordonnées",coordX,coordY)
 #				print("symbole :",map_travail[i][k])
-				if map_travail[i][k] == '.' or map_travail[i][k] == 'w':   #Si il est possible de mettre un routeur sur la case
-					liste_case_couverte = cases_couvertes(map_travail,coordX,coordY,perim_routeur,largeur_map,hauteur_map) 	#On regarde les case couvertes
+				
+				#Si il est possible de mettre un routeur sur la case
+				if map_travail[i][k] == '.' or map_travail[i][k] == 'w':
+					
+					#On cherche toutes les case couvertes
+					liste_case_couverte = cases_couvertes(map_travail,coordX,coordY,perim_routeur,largeur_map,hauteur_map)
 #					print("cases couvertes :",liste_case_couverte)
 #					print(" ")
 					if liste_case_couverte!=0:
@@ -206,16 +223,28 @@ def placement_routeurV1(plan,data):
 #		print(" ")
 		cout=cout+prix_routeur			#On met à  jour le budget pour vérifier quer l'on peut continuer
 		print("cout :",cout," budget :",budget)
-		liste_case_couverte = cases_couvertes(map_travail,liste_score_routeur[0][1],liste_score_routeur[0][2],perim_routeur,largeur_map,hauteur_map) #Modification de la matrice pour que les cases déjà  couverte ne puissent plus rapporter de points
+		
+		#Modification de la matrice pour que les cases déjà  couverte ne puissent plus rapporter de points
+		liste_case_couverte = cases_couvertes(map_travail,liste_score_routeur[0][1],liste_score_routeur[0][2],perim_routeur,largeur_map,hauteur_map)		
 #		print("case à remplacer :",liste_case_couverte)
 #		print(" ")
 		for i in range(len(liste_case_couverte)):
-			map_travail[liste_case_couverte[i][1]][liste_case_couverte[i][0]]="w"
+			map_travail[liste_case_couverte[i][1]][liste_case_couverte[i][0]]="w"			
 		map_travail[liste_score_routeur[0][2]][liste_score_routeur[0][1]] = "R"
+
+
+		#on enregistre la carte dans un fichier à part
+		passage = passage +1
+		numpassage = str(passage)
+		nommap = "map1-passage " + numpassage
+		np.savetxt(nommap, map_travail, delimiter="",fmt="%s")
+		case_restante=case_restante-len(liste_case_couverte)
+		
 		print("routeur",liste_routeur)
+		print("case restante à couvrir :",case_restante)
 		print(" ")
 #		affichage_matrice(map_travail)
-	return "finale :",liste_routeur     #Dès que l'on a plus de budget, on renvoie la liste des routeurs
+	return "finale :",liste_routeur
 
 
 def affichage_matrice(mat):     #entrée : la matrice
@@ -240,7 +269,8 @@ def trielistescore(liste):
 				liste[i],liste[i+1]=liste[i+1],liste[i]
 				Tampon = False
 	return(liste)
-
+				
+			
 
 if __name__ == '__main__':
 
@@ -251,7 +281,6 @@ if __name__ == '__main__':
 	#print(entete)               #affichage de l'entète, on attrape ici toute les info du fichier .in (en char)
 	matrice = creationMatrice(map)    #notre matrice
 #-------------------------------------------------
-
 #	affichage_matrice(matrice)
 	print(placement_routeurV1(matrice,entete))
 	#print(cases_couvertes(matrice,19,5,3,22,8))
