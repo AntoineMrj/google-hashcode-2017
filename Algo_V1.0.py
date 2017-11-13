@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
 #-------------------------------------------------------------------------------
-# Purpose: Placer le routeur
-# Author:      Guilllaume
-# MAJ:     10/11/2017
+# Purpose: Placer le routeur / Main
+# Author:      Guilllaume / Groupe
+# MAJ:     13/11/2017
 #-------------------------------------------------------------------------------
+
+
 def lectureEntete(file_link):
 	fichier_map = open(file_link, "r")  #on ouvre le fichier à lire en mode lecture
 	premiere_ligne_entete = fichier_map.readline()  #on lit la première ligne
@@ -160,16 +162,15 @@ def cases_couvertes(matrice, coordX_routeur, coordY_routeur, radius, largeur_mat
 
 
 
-
 def placement_routeurV1(plan,data):
 	map_travail=plan
 	liste_routeur=[]
-	budget = int(data[5])			
-	hauteur_map = int(data[0])		
-	largeur_map = int(data[1])		
+	budget = int(data[5])
+	hauteur_map = int(data[0])
+	largeur_map = int(data[1])
 	perim_routeur = int(data[2])
 	prix_routeur = int(data[4])
-	taillemap = hauteur_map*largeur_map		
+	taillemap = hauteur_map*largeur_map
 	cout=0
 	while budget-cout>=0:
 		temoin=0
@@ -239,8 +240,7 @@ def trielistescore(liste):
 				liste[i],liste[i+1]=liste[i+1],liste[i]
 				Tampon = False
 	return(liste)
-				
-			
+
 
 if __name__ == '__main__':
 
@@ -251,6 +251,7 @@ if __name__ == '__main__':
 	#print(entete)               #affichage de l'entète, on attrape ici toute les info du fichier .in (en char)
 	matrice = creationMatrice(map)    #notre matrice
 #-------------------------------------------------
+
 #	affichage_matrice(matrice)
 	print(placement_routeurV1(matrice,entete))
 	#print(cases_couvertes(matrice,19,5,3,22,8))
