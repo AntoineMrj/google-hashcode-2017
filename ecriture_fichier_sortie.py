@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+
+#-------------------------------------------------------------------------------
+# Purpose: Placer le routeur
+# Author:      BAstien
+# MAJ:     14/11/2017
+#-------------------------------------------------------------------------------
+
 #entête : nombre de cables posés, liste des coordonnées des cases de cable, nombre de routeur, liste des coordonnées des routeurs
 def ecrire_fichier(nb_cabl, liste_coord_cabl, nb_rout, liste_coord_rout):
     with open("coord.out", "w") as fichier: #ouvre le fichier de sortie (le créé si non existant)

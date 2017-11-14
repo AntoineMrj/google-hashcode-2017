@@ -5,6 +5,7 @@
 # Author:      MAJ Antoine
 # MAJ:     14/11/2017
 #-------------------------------------------------------------------------------
+
 import numpy as np
 import relier_routeurs as rr
 import ecriture_fichier_sortie as wr
