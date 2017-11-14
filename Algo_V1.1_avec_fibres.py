@@ -2,8 +2,8 @@
 
 #-------------------------------------------------------------------------------
 # Purpose: Placer le routeur
-# Author:      Guilllaume
-# MAJ:     10/11/2017
+# Author:      MAJ Antoine
+# MAJ:     14/11/2017
 #-------------------------------------------------------------------------------
 import numpy as np
 import relier_routeurs as rr
@@ -169,28 +169,28 @@ def cases_couvertes(matrice, coordX_routeur, coordY_routeur, radius, largeur_mat
 def placement_routeurV1(plan,data):
 	map_travail=plan
 	liste_routeur=[]
-	budget = int(data[5])			
-	hauteur_map = int(data[0])		
-	largeur_map = int(data[1])		
+	budget = int(data[5])
+	hauteur_map = int(data[0])
+	largeur_map = int(data[1])
 	perim_routeur = int(data[2])
 	prix_routeur = int(data[4])
-	taillemap = hauteur_map*largeur_map		
+	taillemap = hauteur_map*largeur_map
 	cout=0
 	passage = 0
 	case_restante = 0
-	
+
 #on calcule le nombre de case à couvrir
 	for i in range(hauteur_map):
 		for k in range(largeur_map):
 			if map_travail[i][k] == '.':
 				case_restante=case_restante+1
-	print("Case à couvrir :",case_restante," Budget :",budget)	
+	print("Case à couvrir :",case_restante," Budget :",budget)
 
 #Tant que l'on a du budget ou qu'il reste des case à couvrir on fait le test
 	while budget-cout>prix_routeur and case_restante> 0:
 		temoin=0
 		temoin2=0
-		liste_score_routeur=[] 
+		liste_score_routeur=[]
 		#On test chaque case de la matrice
 		for i in range(hauteur_map):
 			coordY=i
@@ -203,10 +203,10 @@ def placement_routeurV1(plan,data):
 					print(temoin2*1000,"/",taillemap," cases traitées")
 #				print("coordonnées",coordX,coordY)
 #				print("symbole :",map_travail[i][k])
-				
+
 				#Si il est possible de mettre un routeur sur la case
 				if map_travail[i][k] == '.' or map_travail[i][k] == 'w':
-					
+
 					#On cherche toutes les case couvertes
 					liste_case_couverte = cases_couvertes(map_travail,coordX,coordY,perim_routeur,largeur_map,hauteur_map)
 #					print("cases couvertes :",liste_case_couverte)
@@ -226,13 +226,13 @@ def placement_routeurV1(plan,data):
 #		print(" ")
 		cout=cout+prix_routeur			#On met à  jour le budget pour vérifier quer l'on peut continuer
 		print("cout :",cout," budget :",budget)
-		
+
 		#Modification de la matrice pour que les cases déjà  couverte ne puissent plus rapporter de points
-		liste_case_couverte = cases_couvertes(map_travail,liste_score_routeur[0][1],liste_score_routeur[0][2],perim_routeur,largeur_map,hauteur_map)		
+		liste_case_couverte = cases_couvertes(map_travail,liste_score_routeur[0][1],liste_score_routeur[0][2],perim_routeur,largeur_map,hauteur_map)
 #		print("case à remplacer :",liste_case_couverte)
 #		print(" ")
 		for i in range(len(liste_case_couverte)):
-			map_travail[liste_case_couverte[i][1]][liste_case_couverte[i][0]]="w"			
+			map_travail[liste_case_couverte[i][1]][liste_case_couverte[i][0]]="w"
 		map_travail[liste_score_routeur[0][2]][liste_score_routeur[0][1]] = "R"
 
 
@@ -242,7 +242,7 @@ def placement_routeurV1(plan,data):
 		nommap = "map1-passage " + numpassage
 		np.savetxt(nommap, map_travail, delimiter="",fmt="%s")
 		case_restante=case_restante-len(liste_case_couverte)
-		
+
 		print("routeur",liste_routeur)
 		print("case restante à couvrir :",case_restante)
 		print(" ")
@@ -257,11 +257,6 @@ def affichage_matrice(mat):     #entrée : la matrice
 				print(mat[i][j], end="")        #on affiche l'élément sans retour à  la ligne
 			print()
 
-def creation_backbone():      #on affiche le backbone sur la map
-
-	coord_y_backbone = int(entete[6])    #on recupère les coord sur le return de la lecture entete
-	coord_x_backbone = int(entete[7])
-	matrice[coord_y_backbone][coord_x_backbone]='b'    #il prend la valeur de b
 
 def trielistescore(liste):
 	Tampon = False
@@ -272,11 +267,11 @@ def trielistescore(liste):
 				liste[i],liste[i+1]=liste[i+1],liste[i]
 				Tampon = False
 	return(liste)
-				
-			
+
+
 
 if __name__ == '__main__':
-    
+
 #-------------------------------------------------
     """ LECTURE DE LA MAP  : Code lecture_entete.py """
     map="charleston_road.in"               #Choix de la map   ( ex : charleston_road.in )
@@ -284,13 +279,13 @@ if __name__ == '__main__':
     #print(entete)               #affichage de l'entète, on attrape ici toute les info du fichier .in (en char)
     matrice = creationMatrice(map)    #notre matrice
 #-------------------------------------------------
+
     backbone = int(entete[6]), int(entete[7])   #on recupère les coord du backbone pour les ajouter à la liste de routeurs
-    
+
     listeRouteurs = [[181, 131], [205, 125], [158, 123], [137, 123], [93, 123], [72, 123], [181, 110], [205, 104], [181, 89], [205, 83], [158, 71], [137, 71], [93, 71], [72, 71], [181, 68], [205, 62], [181, 47], [160, 34], [139, 34], [118, 34], [97, 34], [76, 34], [116, 143], [51, 93], [48, 128], [48, 49], [116, 93], [160, 145], [139, 145], [95, 145], [74, 145], [51, 72], [116, 122], [116, 72], [33, 115], [33, 94], [33, 73], [33, 52], [136, 108], [71, 108], [136, 56], [71, 56], [158, 108], [93, 108], [158, 56], [93, 56], [160, 93], [139, 93], [95, 93], [74, 93], [116, 55], [59, 34], [51, 114], [202, 50], [181, 34], [59, 143], [181, 143], [33, 135], [116, 114], [194, 130], [137, 145], [51, 70], [215, 52], [137, 93], [72, 93], [204, 109], [204, 88], [190, 45], [44, 47], [46, 137], [204, 71], [136, 129], [71, 129], [157, 108], [92, 108], [136, 77], [71, 77], [157, 56], [92, 56], [56, 45], [207, 136], [41, 51], [190, 141], [58, 142]]
-    #listeRouteurs = placement_routeurV1(matrice,entete) #à décommenter pour faire tourner l'algo 1h
+    #listeRouteurs = placement_routeurV1(matrice,entete) #à décommenter pour faire tourner l'algo 30min
     arbreMini = rr.relierRouteurs(listeRouteurs) #Renvoie la liste des coordonnées de toutes les fibres à placer (routeurs compris)
     fibresEnPlus = rdeux.relier2points(backbone,arbreMini[0]) #On relie la première fibre au backbone
-    arbreMini = fibresEnPlus + arbreMini 
+    arbreMini = fibresEnPlus + arbreMini
     arbreMini.remove(backbone) #on enlève la fibre qui est sur le backbone
     wr.ecrire_fichier(len(arbreMini),arbreMini,len(listeRouteurs),listeRouteurs)
-    
