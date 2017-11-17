@@ -71,12 +71,12 @@ def relier2points(point1, point2):
     if echange: #si on a inversé les points on retourne la liste des points à l'envers
         points.reverse()
     return points
-    
 
-def relierRouteurs(listeRouteurs): 
+def relierRouteurs(listeRouteurs, backbone): 
     
     listeAretesC = [] #liste d'aretes du graphe complet de la forme (taille,sommet courant, sommet auquel on le relie,coordonnées des points de l'arete)
-    
+    listeRouteurs = [backbone] + listeRouteurs
+
     #===============================
     # GENERATION DU GRAPHE COMPLET
     #===============================
@@ -87,14 +87,13 @@ def relierRouteurs(listeRouteurs):
                 tuple = (len(relier2points(listeRouteurs[i],listeRouteurs[j])),listeRouteurs[i],listeRouteurs[j],relier2points(listeRouteurs[i],listeRouteurs[j]))
                 listeAretesC.append(tuple) #on ajoute l'arête à la liste
                 #print(listeRouteurs[i],'->',listeRouteurs[j]) -> à décommenter pour afficher les relations entres les sommets
-    listeAretesC.sort() #On trie les arêtes dans l'ordre croissant (par poids)
     
     #===============================
     #      ALGORITHME DE PRIM
     #===============================
     succ = [] 
     arbreMini = [] #arbre couvrant minimal contenant la liste des points où mettre de la fibre pour relier tous les routeurs
-    sommet = listeAretesC[0][1] #On prend arbitrairement comme premier sommet le sommet de départ de la première arrête de la liste des arêtes du graphe complet
+    sommet = listeAretesC[0][1] #On prend arbitrairement comme premier sommet le sommet de départ (le backbone) de la première arrête de la liste des arêtes du graphe complet
     listeSommetsRelies = [] #Liste contenant les sommets déjà reliés
 
     while len(listeSommetsRelies)+1<len(listeRouteurs): #Tant que tous les routeurs ne sont pas reliés
@@ -120,6 +119,9 @@ def relierRouteurs(listeRouteurs):
         for m in range(len(arbreMini[l][3])):
             if arbreMini[l][3][m] not in arbreFinal: #On ne recopie pas les doublons
                 arbreFinal.append(arbreMini[l][3][m])
+
+    arbreFinal.pop(0) #On enlève le premier éléement de la liste, c'est à dire le backbone
+    print(arbreFinal)
     
     return arbreFinal
 
