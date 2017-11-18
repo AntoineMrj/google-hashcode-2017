@@ -75,7 +75,7 @@ def relier2points(point1, point2):
         points.reverse()
     return points
 
-def relierRouteurs(listeRouteurs, backbone): 
+def relierRouteurs(liste_routeurs, backbone): 
 
     #===================================================
     #DETERMINATION DES LISTES 'ARBRE', 'DIST' ET 'PRED'
