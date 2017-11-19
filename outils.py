@@ -364,7 +364,7 @@ def cases_couvertes(matrice, coordX_routeur, coordY_routeur, radius, largeur_mat
     #fin
     return liste_cases_couvertes
 
-def prix(nb_routeurs,nb_fibre,Pf,Pr,B):
+def prix(nb_routeurs,nb_fibre,Pf,Pr):
     #Pr est le prix d'un routeur
     #Pb est le prix d'une fibre
     #B est le budget
