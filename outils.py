@@ -175,7 +175,7 @@ def relierRouteurs(liste_routeurs, backbone):
         else: #sinon
             fin = False #ce n'est pas fini ^^
             
-        print(test) #j'affiche la valeur de test pour être sûr que l'algo tourne pas dans le vide ^^
+        #print(test) #j'affiche la valeur de test pour être sûr que l'algo tourne pas dans le vide ^^
     
     for point in fibre_ordonee: #on élimine les doublons
         if point not in fibre_finale: #si le point de 'fibre_ordonee' n'est pas déjà dans 'fibre_finale'
@@ -363,6 +363,14 @@ def cases_couvertes(matrice, coordX_routeur, coordY_routeur, radius, largeur_mat
 
     #fin
     return liste_cases_couvertes
+
+def prix(nb_routeurs,nb_fibre,Pf,Pr,B):
+    #Pr est le prix d'un routeur
+    #Pb est le prix d'une fibre
+    #B est le budget
+    prix = nb_routeurs * Pr + nb_fibre * Pf
+
+    return prix
 
     
 def calcule_score2(carte,bonus,largeur_map,hauteur_map,perim_routeur,conn,liste_case):
