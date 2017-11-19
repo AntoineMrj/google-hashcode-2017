@@ -145,7 +145,8 @@ def relierRouteurs(liste_routeurs, backbone):
     
     while fin == False: #tant que tous les éléments de 'fibre' ne sont pas dans 'fibre_ordonee'
         
-        for i in range(len(fibre)): #pour chaque point_fibré_i
+        i = 0
+        while i < len(fibre): #pour chaque point_fibré_i de la liste 'fibre'
             #si le point_fibré_i a un voisin dans la liste ordonée ou dans la liste des routeurs
             #ET s'il n'est pas un routeur ou un point déja dans la liste ordonée
             if ((((fibre[i][0]+1,fibre[i][1]) in fibre_ordonee) or ((fibre[i][0]+1,fibre[i][1]) in liste_routeurs)) \
@@ -158,6 +159,9 @@ def relierRouteurs(liste_routeurs, backbone):
             or (((fibre[i][0]-1,fibre[i][1]+1) in fibre_ordonee) or ((fibre[i][0]-1,fibre[i][1]+1) in liste_routeurs)) \
             and (fibre[i] not in fibre_ordonee and fibre[i] not in liste_routeurs)):
                 fibre_ordonee.append(fibre[i]) #alors on l'ajoute à la liste ordonée
+                fibre.remove(fibre[i]) #et on le supprime de la liste 'fibre'
+                i-=1 #on décrémente l'indice i de 1 (car sinon 'index out of range")
+            i+=1 #on incrémente i de 1
         
         test = True
         for point in fibre: #pour chaque point dans 'fibre'
@@ -459,4 +463,3 @@ def placement_routeurV1(plan,data):
         print(" ")
     print("Fini")
     return liste_routeur
-
