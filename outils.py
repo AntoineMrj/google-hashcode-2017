@@ -75,80 +75,61 @@ def relier2points(point1, point2):
         points.reverse()
     return points
 
-
-def relierRouteurs(liste_routeurs, backbone):
-    
-    """Cette fonction permet de déterminer l'arbre couvrant minimum reliant tous les routeurs présents dans liste_routeurs. L'algorithme utilisé
-    est l'algorithme de Prim."""
+def relierRouteurs(liste_routeurs, backbone): 
 
     #===================================================
     #DETERMINATION DES LISTES 'ARBRE', 'DIST' ET 'PRED'
     #===================================================
     
     n = len(liste_routeurs)
-    arbre = [backbone] #l'arbre initial contient les coordonnées du backbone
-    dist = [+float('inf')]*n #on initialise la liste des distances à +infini
-    pred = [None]*n #on initialise la liste des prédecessuers à None
+    arbre = [backbone]
+    dist = [+float('inf')]*n
+    pred = [None]*n
     
-    while len(arbre) < n+1: #tant que l'on a pas ajouté tout les routeurs de liste_routeurs dans arbre
+    while len(arbre) < n+1:
         
-        for i in range(n): #pour chaque routeur_i dans liste_routeurs
+        for i in range(n):
             
-                dist_i = distance(arbre[-1],liste_routeurs[i]) #on calcule la distance entre le routeur_i est le dernier routeur entré dans l'arbre
+                dist_i = distance(arbre[-1],liste_routeurs[i])
                 
-                if dist[i] != None: #si le routeur n'est pas déjà dans l'arbre en cours de construction
-                    if dist_i < dist[i]: #si la distance calculée est inférieure à la dernière distance enregistrée dans la liste 'dist'
-                        dist[i] = dist_i #alors on met à jour la liste 'dist' avce la nouvelle distance qui vient d'être calculée
-                        pred[i] = arbre[-1] #et on met à jour la liste 'pred' en indiquant que le prédecesseur du routeur_i est le dernier routeur entré dans l'arbre
+                if dist[i] != None:
+                    if dist_i < dist[i]:
+                        dist[i] = dist_i
+                        pred[i] = arbre[-1]
         
-        mini = +float('inf') #ici...
-        for d in dist: #...on caclule...
-          if d != None: #...le minimum de...
-            if d < mini: #...la liste 'dist'.
+        mini = +float('inf')
+        for d in dist:
+          if d != None:
+            if d < mini:
                 mini = d
         
 
-        for j in range(len(dist)): #pour chaque distance_j dans la liste 'dist'
-            if dist[j] == mini: #si la distance_j correspond à la distance minimum
-                arbre.append(liste_routeurs[j]) #alors on fait rentrer dans l'arbre le routeur_j qui est à la distance minimum de l'arbre
-                dist[j] = None #on met à jour la distance du routeur_j à None puisqu'il vient de rentrr dans l'arbre
-                break #on force l'arrêt de la boucle for pour éviter qu'un 2ème routeur, étant aussi à la distance minimum de l'arbre, rentre dans l'arbre
+        for j in range(len(dist)):
+            if dist[j] == mini:
+                arbre.append(liste_routeurs[j])
+                dist[j] = None
+                break
 
     
     #============================================================================
     #RELIER LES ROUTEURS A LEUR PREDECESSEUR AVEC LA FIBRE EN PARTANT DU BACKBONE
     #============================================================================
 
-    fibre = [] #on initialise la liste 'fibre' qui contiendra toutes les coordonnées des points où passe la fibre
+    fibre = []
+    nb_cable = len(fibre)
     
-    for i in range(0,len(liste_routeurs)): #pour chaque routeur_i dans liste_routeurs
-        portion_chemin_i = relier2points(pred[i],liste_routeurs[i]) #on détermine la liste des coordonnées des points reliant le routeur_i à son prédecesseur_i en utilisant la fontion d'Antoine
-        fibre += portion_chemin_i #on incrémente la liste 'fibre' de la liste calculée précédemment
+    for i in range(0,len(liste_routeurs)):
+        portion_chemin_i = relier2points(pred[i],liste_routeurs[i])
+        fibre += portion_chemin_i
+        nb_cable += len(portion_chemin_i)
         
-    """On a maintenant la liste de tous les points fibrés, mais pour que le simulateur en ligne puisse l'interpréter, il faut l'ordonner de telle
-    façon que:
-            - le premier point fibré de la liste soit voisin du backbone
-            - tous les points fibrés suivants devont être voisins au moins à:
-                    > l'un des points situés devant eux dans la liste
-                    > ou à l'un des routeurs posés
+    fibre_ordonee = [backbone]
+    fibre_finale = []
+    fin = False
     
-    Pour cela, on ne va pas modoifier la liste 'fibre' directement, mais on va créer une 2ème liste 'fibre_ordonee' dans laquelle on fera rentrer
-    au fur et à mesure les points fibrés dans le bon ordre.
-    
-    Enfin, on créera une 3ème et dernière liste 'fibre_finale' qui sera identique à 'fibre_ordonee' mais sans le backbone et sans les doublons.
-    C'est cette liste que la fonction renvoie.
-    """
-    
-    fibre_ordonee = [backbone] #on initialise la liste ordonnée avec le backbone
-    fibre_finale = [] #on initialise la liste finale
-    fin = False #cette variable booléenne permet de s'assurer que tous les éléments de 'fibre' sont bien dans 'fibre_ordonee', on l'initialise donc à False
-    
-    while fin == False: #tant que tous les éléments de 'fibre' ne sont pas dans 'fibre_ordonee'
+    while fin == False:
         
-        i = 0
-        while i < len(fibre): #pour chaque point_fibré_i de la liste 'fibre'
-            #si le point_fibré_i a un voisin dans la liste ordonée ou dans la liste des routeurs
-            #ET s'il n'est pas un routeur ou un point déja dans la liste ordonée
+        for i in range(len(fibre)):
             if ((((fibre[i][0]+1,fibre[i][1]) in fibre_ordonee) or ((fibre[i][0]+1,fibre[i][1]) in liste_routeurs)) \
             or (((fibre[i][0]-1,fibre[i][1]) in fibre_ordonee) or ((fibre[i][0]-1,fibre[i][1]) in liste_routeurs)) \
             or (((fibre[i][0],fibre[i][1]+1) in fibre_ordonee) or ((fibre[i][0],fibre[i][1]+1) in liste_routeurs)) \
@@ -158,32 +139,29 @@ def relierRouteurs(liste_routeurs, backbone):
             or (((fibre[i][0]+1,fibre[i][1]-1) in fibre_ordonee) or ((fibre[i][0]+1,fibre[i][1]-1) in liste_routeurs)) \
             or (((fibre[i][0]-1,fibre[i][1]+1) in fibre_ordonee) or ((fibre[i][0]-1,fibre[i][1]+1) in liste_routeurs)) \
             and (fibre[i] not in fibre_ordonee and fibre[i] not in liste_routeurs)):
-                fibre_ordonee.append(fibre[i]) #alors on l'ajoute à la liste ordonée
-                fibre.remove(fibre[i]) #et on le supprime de la liste 'fibre'
-                i-=1 #on décrémente l'indice i de 1 (car sinon 'index out of range")
-            i+=1 #on incrémente i de 1
+                fibre_ordonee.append(fibre[i])
         
         test = True
-        for point in fibre: #pour chaque point dans 'fibre'
-            if point not in fibre_ordonee: #s'il n'est pas dans 'fibre_ordonee'
-                test = False #alors le test renvoie False
-            else: #sinon
-                test = test and True #alors le test renvoie True AND la valeur du test précédent (donc si un seul point de 'fibre' n'est pas dans 'fibre_ordonee', le test renvoie False)
+        for elmt in fibre:
+            if elmt not in fibre_ordonee:
+                test = False
+            else:
+                test = test and True
         
-        if test == True: #si tous les points de 'fibre' sont dans 'fibre_ordonee'
-            fin = True #alors c'est fini
-        else: #sinon
-            fin = False #ce n'est pas fini ^^
+        if test == True:
+            fin = True
+        else:
+            fin = False
             
-        #print(test) #j'affiche la valeur de test pour être sûr que l'algo tourne pas dans le vide ^^
+        #print(test)
     
-    for point in fibre_ordonee: #on élimine les doublons
-        if point not in fibre_finale: #si le point de 'fibre_ordonee' n'est pas déjà dans 'fibre_finale'
-            fibre_finale.append(point) #alors il n'a pas de doublon et on peut l'ajouter à 'fibre_finale'
+    for couple in fibre_ordonee:
+        if couple not in fibre_finale:
+            fibre_finale.append(couple)
 
-    for point in fibre_finale: #on élimine le backbone dans 'fibre_finale'
-        if point == backbone:
-            fibre_finale.remove(point)
+    for couple in fibre_finale:
+        if couple == backbone:
+            fibre_finale.remove(couple)
     
     return fibre_finale
 
@@ -262,18 +240,18 @@ def creationMatrice(file_link):
 
     return matrice  #on renvoie la matrice créée
 
+
 #entrée : la matrice (avec les cases déjà couvertes remplacées (x)), coordonnées du routeur,
 #         rayon du routeur, largeur et hauteur de la matrice
 def cases_couvertes(matrice, coordX_routeur, coordY_routeur, radius, largeur_matrice, hauteur_matrice):
-
     #matrice de travail
-    map_travail = matrice
+    map_travail_1 = matrice
 
     #variables passées dans la fonction
     x = coordX_routeur
     y = coordY_routeur
-    l = largeur_matrice
     h = hauteur_matrice
+    l = largeur_matrice
 
     #coordonnées d'origine du carré autour du routeur
     x_origin = x - radius
@@ -283,81 +261,87 @@ def cases_couvertes(matrice, coordX_routeur, coordY_routeur, radius, largeur_mat
     y_fin = y + radius
 
     #coordonnées d'origine du carré entre la case étudiée et le routeur
-    deb_x_mur = 0
-    deb_y_mur = 0
+    x_origin_case_test = 0
+    y_origin_case_test = 0
     #coordonnées de fin du carré entre la case étudiée et le routeur
-    fin_x_mur = 0
-    fin_y_mur = 0
+    x_fin_case_test = 0
+    y_fin_case_test = 0
+
+    #variable vérifiant la présence d'un mur ou non
+    presence_mur = False
 
     #listes des cases couvertes
     liste_cases_couvertes = []
 
-    #listes des cases non couvertes
-    liste_cases_non_couvertes = []
-
     #on vérifie la position du routeur (cellule '.')
-    if (map_travail[y][x] == '.'):
+    if (map_travail_1[y][x] == '.') or (map_travail_1[y][x] == 'w'):
 
         #mise à jour des cases couvertes sur la map
         #on parcours chaque ligne du carré étudié
-        for y_coord in range(y_origin, y_fin + 1):
+        for y_coord in range(y_origin, y_fin+1):
             #on vérifie que la ligne de la case étudiée soit à l'intérieur de la matrice
             if (y_coord >= 0 and y_coord < h):
                 #on parcours chaque colonne du carré étudié
-                for x_coord in range (x_origin, x_fin + 1):
+                for x_coord in range (x_origin, x_fin+1):
                     #on vérifie que la colonne de la case étudiée soit à l'intérieur de la matrice
                     if (x_coord >= 0 and x_coord < l):
-                        #on ajoute temporairement la cases à la liste de celles couvertes
-                        liste_cases_couvertes.append([x_coord, y_coord])
-                        #on regarde si la case testée n'est pas déjà non couverte
-                        if [x_coord, y_coord] not in liste_cases_non_couvertes:
-                            #on vérifie que la case étudiée s'agit d'une cellule '.'
-                            if (map_travail[y_coord][x_coord] == '#'):
-                                #on compare la position de la ligne de la case étudié et la ligne du routeur
-                                if (x_coord < x):
-                                    deb_x_mur = x_origin
-                                    fin_x_mur = x_coord
-                                elif (x_coord > x):
-                                    deb_x_mur = x_coord
-                                    fin_x_mur = x_fin
-                                else:
-                                    deb_x_mur = x_origin
-                                    fin_x_mur = x_fin
-                                #on compare la position de la colonne de la case étudié et la colonne du routeur
-                                if (y_coord < y):
-                                    deb_y_mur = y_origin
-                                    fin_y_mur = y_coord
-                                elif (y_coord > y):
-                                    deb_y_mur = y_coord
-                                    fin_y_mur = y_fin
-                                else:
-                                    deb_y_mur = y_origin
-                                    fin_y_mur = y_fin
-                                #on met à jour la liste des cases non couverte par le mur actuel
-                                for y_mur in range (deb_y_mur, fin_y_mur + 1):
-                                    for x_mur in range (deb_x_mur, fin_x_mur + 1):
-                                        if [x_mur, y_mur] not in liste_cases_non_couvertes:
-                                            liste_cases_non_couvertes.append([x_mur, y_mur])
-                        else:
-                            pass
-        #on supprimer les cases non couvertes de la liste des cases couvertes
-        for i in range (0, len(liste_cases_non_couvertes)):
-            liste_cases_couvertes.remove(liste_cases_non_couvertes[i])
+                        #on vérifie que la case étudiée s'agit d'une cellule '.'
+                        if (map_travail_1[y_coord][x_coord] == '.'):
+                            #on compare la position de la colonne de la case étudié et la colonne du routeur
+                            if (y_coord < y):
+                                y_origin_case_test = y_coord
+                                y_fin_case_test = y
+                            elif (y_coord > y):
+                                y_origin_case_test = y
+                                y_fin_case_test = y_coord
+                            else:
+                                y_origin_case_test = y
+                                y_fin_case_test = y
+                            #on compare la position de la ligne de la case étudié et la ligne du routeur
+                            if (x_coord < x):
+                                x_origin_case_test = x_coord
+                                x_fin_case_test = x
+                            elif (x_coord > x):
+                                x_origin_case_test = x
+                                x_fin_case_test = x_coord
+                            else:
+                                x_origin_case_test = x
+                                x_fin_case_test = x
+
+                            #on parcours l'ensemble du carré entre la case étudiée et le routeur pour vérifier la présence d'un mur ou non
+                            #on parcours chaque colonne
+                            for y_coord_case_test in range(y_origin_case_test, y_fin_case_test+1):
+                                #on parcours chaque ligne
+                                for x_coord_case_test in range(x_origin_case_test, x_fin_case_test+1):
+                                    #si présence d'une cellule mur '#'
+                                    if (map_travail_1[y_coord_case_test][x_coord_case_test] == '#'):
+                                        #activation de la variable de présence
+                                        presence_mur = True
+                                    else:
+                                        #reset de la variable de présence
+                                        presence_mur = False
+                                    #on vérifie l'état de la variable de présence
+                                    if (presence_mur):
+                                        #si présence d'un mur on stop le parcours des lignes restantes
+                                        break
+                                #on vérifie l'état de la variable de présence
+                                if (presence_mur == True):
+                                    #si présence d'un mur on stop le parcours des colonnes restantes
+                                    break
+                            #on vérifie l'état de la variable de présence
+                            if (presence_mur == False): #ajout de la case étudiée à la liste des cases couvertes
+                                #matrice[y_coord][x_coord]='x'           #affichage cord
+                                liste_cases_couvertes.append([x_coord, y_coord])
+                                #matrice[y][x]='r'           #affichage corrd routeur
+
 
     else:
-        #si cellule incorrect (vide ou mur) on envoie 0 pour stoper la fonction
+        #si cellule incorrect (vie ou mur) on envoie 0 pour stoper la fonction
         return 0
 
     #fin
     return liste_cases_couvertes
 
-def prix(nb_routeurs,nb_fibre,Pf,Pr):
-    #Pr est le prix d'un routeur
-    #Pb est le prix d'une fibre
-    #B est le budget
-    prix = nb_routeurs * Pr + nb_fibre * Pf
-
-    return prix
     
 def calcule_score2(carte,bonus,largeur_map,hauteur_map,perim_routeur,conn,liste_case):
     liste_score2=[] 
@@ -457,3 +441,4 @@ def placement_routeurV1(plan,data):
         print(" ")
     print("Fini")
     return liste_routeur
+
