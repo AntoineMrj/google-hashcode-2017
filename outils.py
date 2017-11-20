@@ -241,7 +241,7 @@ def creationMatrice(file_link):
     matrice = []    #matrice pincipale
     ligneMatrice = []   #ligne d'une matrice
 
-    fichier_map = open(file_link, "r")  #on ouvre le fichier à  lire
+    fichier_map = open(file_link, "r")  #on ouvre le fichier à  lire
 
     for i in range(0, 3):   #on parcours l'entète
         variable_inutile = fichier_map.readline()   #on stock temporairement les éléments trouvés
@@ -250,30 +250,30 @@ def creationMatrice(file_link):
     while 1:    #on parcours l'ensemble des caractères de la map
         char = fichier_map.read(1)  #on récupère le caractère suivant
         if char == '\n':    #si c'est une fin de ligne
-            matrice.append(ligneMatrice)    #on ajoute la ligne de matrice créée Ã  la matrice principale
+            matrice.append(ligneMatrice)    #on ajoute la ligne de matrice créée Ã  la matrice principale
             ligneMatrice = []   #on reset la ligne de matrice pour passer  la suivante
             pass
         elif not char:  #si aucun caractère n'est récupéré, fin de fichier, on sort de la boucle
             break
         else:   #sinon (caractère trouvé)
-            ligneMatrice.append(char)   #on ajoute le caractère récupéré à  la fin de la ligne de matrice en cours de création
+            ligneMatrice.append(char)   #on ajoute le caractère récupéré à  la fin de la ligne de matrice en cours de création
 
     fichier_map.close() #on ferme le fichier ouvert
 
     return matrice  #on renvoie la matrice créée
 
-
 #entrée : la matrice (avec les cases déjà couvertes remplacées (x)), coordonnées du routeur,
 #         rayon du routeur, largeur et hauteur de la matrice
 def cases_couvertes(matrice, coordX_routeur, coordY_routeur, radius, largeur_matrice, hauteur_matrice):
+
     #matrice de travail
-    map_travail_1 = matrice
+    map_travail = matrice
 
     #variables passées dans la fonction
     x = coordX_routeur
     y = coordY_routeur
-    h = hauteur_matrice
     l = largeur_matrice
+    h = hauteur_matrice
 
     #coordonnées d'origine du carré autour du routeur
     x_origin = x - radius
@@ -283,82 +283,69 @@ def cases_couvertes(matrice, coordX_routeur, coordY_routeur, radius, largeur_mat
     y_fin = y + radius
 
     #coordonnées d'origine du carré entre la case étudiée et le routeur
-    x_origin_case_test = 0
-    y_origin_case_test = 0
+    deb_x_mur = 0
+    deb_y_mur = 0
     #coordonnées de fin du carré entre la case étudiée et le routeur
-    x_fin_case_test = 0
-    y_fin_case_test = 0
-
-    #variable vérifiant la présence d'un mur ou non
-    presence_mur = False
+    fin_x_mur = 0
+    fin_y_mur = 0
 
     #listes des cases couvertes
     liste_cases_couvertes = []
 
+    #listes des cases non couvertes
+    liste_cases_non_couvertes = []
+
     #on vérifie la position du routeur (cellule '.')
-    if (map_travail_1[y][x] == '.') or (map_travail_1[y][x] == 'w'):
+    if (map_travail[y][x] == '.'):
 
         #mise à jour des cases couvertes sur la map
         #on parcours chaque ligne du carré étudié
-        for y_coord in range(y_origin, y_fin+1):
+        for y_coord in range(y_origin, y_fin + 1):
             #on vérifie que la ligne de la case étudiée soit à l'intérieur de la matrice
             if (y_coord >= 0 and y_coord < h):
                 #on parcours chaque colonne du carré étudié
-                for x_coord in range (x_origin, x_fin+1):
+                for x_coord in range (x_origin, x_fin + 1):
                     #on vérifie que la colonne de la case étudiée soit à l'intérieur de la matrice
                     if (x_coord >= 0 and x_coord < l):
-                        #on vérifie que la case étudiée s'agit d'une cellule '.'
-                        if (map_travail_1[y_coord][x_coord] == '.'):
-                            #on compare la position de la colonne de la case étudié et la colonne du routeur
-                            if (y_coord < y):
-                                y_origin_case_test = y_coord
-                                y_fin_case_test = y
-                            elif (y_coord > y):
-                                y_origin_case_test = y
-                                y_fin_case_test = y_coord
-                            else:
-                                y_origin_case_test = y
-                                y_fin_case_test = y
-                            #on compare la position de la ligne de la case étudié et la ligne du routeur
-                            if (x_coord < x):
-                                x_origin_case_test = x_coord
-                                x_fin_case_test = x
-                            elif (x_coord > x):
-                                x_origin_case_test = x
-                                x_fin_case_test = x_coord
-                            else:
-                                x_origin_case_test = x
-                                x_fin_case_test = x
-
-                            #on parcours l'ensemble du carré entre la case étudiée et le routeur pour vérifier la présence d'un mur ou non
-                            #on parcours chaque colonne
-                            for y_coord_case_test in range(y_origin_case_test, y_fin_case_test+1):
-                                #on parcours chaque ligne
-                                for x_coord_case_test in range(x_origin_case_test, x_fin_case_test+1):
-                                    #si présence d'une cellule mur '#'
-                                    if (map_travail_1[y_coord_case_test][x_coord_case_test] == '#'):
-                                        #activation de la variable de présence
-                                        presence_mur = True
-                                    else:
-                                        #reset de la variable de présence
-                                        presence_mur = False
-                                    #on vérifie l'état de la variable de présence
-                                    if (presence_mur):
-                                        #si présence d'un mur on stop le parcours des lignes restantes
-                                        break
-                                #on vérifie l'état de la variable de présence
-                                if (presence_mur == True):
-                                    #si présence d'un mur on stop le parcours des colonnes restantes
-                                    break
-                            #on vérifie l'état de la variable de présence
-                            if (presence_mur == False): #ajout de la case étudiée à la liste des cases couvertes
-                                #matrice[y_coord][x_coord]='x'           #affichage cord
-                                liste_cases_couvertes.append([x_coord, y_coord])
-                                #matrice[y][x]='r'           #affichage corrd routeur
-
+                        #on ajoute temporairement la cases à la liste de celles couvertes
+                        liste_cases_couvertes.append([x_coord, y_coord])
+                        #on regarde si la case testée n'est pas déjà non couverte
+                        if [x_coord, y_coord] not in liste_cases_non_couvertes:
+                            #on vérifie que la case étudiée s'agit d'une cellule '.'
+                            if (map_travail[y_coord][x_coord] == '#'):
+                                #on compare la position de la ligne de la case étudié et la ligne du routeur
+                                if (x_coord < x):
+                                    deb_x_mur = x_origin
+                                    fin_x_mur = x_coord
+                                elif (x_coord > x):
+                                    deb_x_mur = x_coord
+                                    fin_x_mur = x_fin
+                                else:
+                                    deb_x_mur = x_origin
+                                    fin_x_mur = x_fin
+                                #on compare la position de la colonne de la case étudié et la colonne du routeur
+                                if (y_coord < y):
+                                    deb_y_mur = y_origin
+                                    fin_y_mur = y_coord
+                                elif (y_coord > y):
+                                    deb_y_mur = y_coord
+                                    fin_y_mur = y_fin
+                                else:
+                                    deb_y_mur = y_origin
+                                    fin_y_mur = y_fin
+                                #on met à jour la liste des cases non couverte par le mur actuel
+                                for y_mur in range (deb_y_mur, fin_y_mur + 1):
+                                    for x_mur in range (deb_x_mur, fin_x_mur + 1):
+                                        if [x_mur, y_mur] not in liste_cases_non_couvertes:
+                                            liste_cases_non_couvertes.append([x_mur, y_mur])
+                        else:
+                            pass
+        #on supprimer les cases non couvertes de la liste des cases couvertes
+        for i in range (0, len(liste_cases_non_couvertes)):
+            liste_cases_couvertes.remove(liste_cases_non_couvertes[i])
 
     else:
-        #si cellule incorrect (vie ou mur) on envoie 0 pour stoper la fonction
+        #si cellule incorrect (vide ou mur) on envoie 0 pour stoper la fonction
         return 0
 
     #fin
@@ -371,7 +358,6 @@ def prix(nb_routeurs,nb_fibre,Pf,Pr):
     prix = nb_routeurs * Pr + nb_fibre * Pf
 
     return prix
-
     
 def calcule_score2(carte,bonus,largeur_map,hauteur_map,perim_routeur,conn,liste_case):
     liste_score2=[] 
@@ -448,10 +434,10 @@ def placement_routeurV1(plan,data):
         liste_score_routeur.sort(reverse=True) #Quand toute les case on été testé, on classe les routeur par leur score
         liste_routeur.append([liste_score_routeur[0][1],liste_score_routeur[0][2]])#On garde le meilleur et on le met en place
         liste_case.remove([liste_score_routeur[0][1],liste_score_routeur[0][2]])
-        cout=cout+prix_routeur          #On met à  jour le budget pour vérifier quer l'on peut continuer
+        cout=cout+prix_routeur          #On met à  jour le budget pour vérifier quer l'on peut continuer
         print("cout :",cout,)
         
-        #Modification de la matrice pour que les cases déjà  couverte ne puissent plus rapporter de points
+        #Modification de la matrice pour que les cases déjà  couverte ne puissent plus rapporter de points
         liste_case_couverte = cases_couvertes(map_travail,liste_score_routeur[0][2],liste_score_routeur[0][1],perim_routeur,largeur_map,hauteur_map)        
 
         for i in range(len(liste_case_couverte)):
