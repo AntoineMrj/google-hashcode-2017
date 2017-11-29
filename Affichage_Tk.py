@@ -42,11 +42,12 @@ def affichage_matrice(mat):     #entrée : la matrice
 
 def Clic(event):
 
+    command = Effacer()
     global a
     print("passage : ",nbclic())
 
     num_map = a
-    map="map1-passage {0}".format(num_map)
+    map="map2-passage {0}".format(num_map)
     #map="all_maps"
 
     matrice = creationMatrice(map)
@@ -70,6 +71,10 @@ def nbclic():
     global a
     a=a+1
     return a
+
+def Effacer():
+    """ Efface la zone graphique """
+    Canevas.delete(ALL)
 
 a=0 #num map
 
@@ -101,5 +106,8 @@ if __name__ == '__main__':
     # un clic gauche dans la fenetre provoquera l'appel de la fonction utilisateur Clic()
     Canevas.bind('<Button-1>', Clic)
     Canevas.pack(padx =5, pady =5)
+
+    # Création d'un widget Button (bouton Effacer)
+    Button(Mafenetre, text ='Effacer', command = Effacer).pack(side=LEFT,padx = 5,pady = 5)
 
     Mafenetre.mainloop()
