@@ -1,9 +1,9 @@
 ﻿# -*- coding: utf-8 -*-
 
 #-------------------------------------------------------------------------------
-# Purpose: Affichage de la matrice
+# Purpose: Affichage de la matrice Final
 # Author:      Arthur
-# MAJ:     21/11/2017
+# MAJ:     04/12/2017
 #-------------------------------------------------------------------------------
 
 from tkinter import *
@@ -33,12 +33,6 @@ def creationMatrice(file_link):
 
 	return matrice  #on renvoie la matrice créée
 
-def affichage_matrice(mat):     #entrée : la matrice
-
-		for i in range (0, len(mat)):       #on parcours la totalité des lignes de la matrice
-			for j in range(0, len(mat[i])):     #on parcours la totalité du noimbre de colonnes de la matrice
-				print(mat[i][j], end="")        #on affiche l'élément sans retour à  la ligne
-			print()
 
 def Clic(event):
 
@@ -47,7 +41,7 @@ def Clic(event):
     print("passage : ",nbclic())
 
     num_map = a
-    map="map2-passage {0}".format(num_map)
+    map="map3-passage {0}".format(num_map)  #choix de la map
     #map="all_maps"
 
     matrice = creationMatrice(map)
@@ -57,15 +51,15 @@ def Clic(event):
             r = 1
             # on dessine un cercle dans la zone graphique
             if matrice[j][i]=='.':
-                item = Canevas.create_oval(i-r, j-r, i+r, j+r, outline='blue')
+                item = Canevas.create_oval(i-r, j-r, i+r, j+r, outline='#ffe5cc')
             elif matrice[j][i]=='w':
-                item = Canevas.create_oval(i-r, j-r, i+r, j+r, outline='black')
+                item = Canevas.create_oval(i-r, j-r, i+r, j+r, outline='red')   # ou #ffdcff
             elif matrice[j][i]=='R':
-                item = Canevas.create_oval(i-r, j-r, i+r, j+r, outline='pink')
-            elif matrice[j][i]=='#':
                 item = Canevas.create_oval(i-r, j-r, i+r, j+r, outline='white')
+            elif matrice[j][i]=='#':
+                item = Canevas.create_oval(i-r, j-r, i+r, j+r, outline='black')
             else:
-                item = Canevas.create_oval(i-r, j-r, i+r, j+r, outline='red')  #cases extérieur
+                item = Canevas.create_oval(i-r, j-r, i+r, j+r, outline='#ffffff')  #cases extérieur
 
 def nbclic():
     global a
@@ -76,30 +70,27 @@ def Effacer():
     """ Efface la zone graphique """
     Canevas.delete(ALL)
 
-a=0 #num map
+a=0 #numéro de la map
 
 if __name__ == '__main__':
 
     # Création de la fenêtre principale (main window)
     Mafenetre = Tk()
-    Mafenetre.title('Affichage graphique Polyhash')
-    Mafenetre.geometry('800x700')
+    Mafenetre.title('Polyhash Graphic display')
+    Mafenetre.geometry('700x700')
     Mafenetre['bg']='grey'
 
-    # Image de fond
-    photo = PhotoImage(file="vert.gif")
-
     # texte d'entrée
-    Label1 = Label(Mafenetre, text = 'Polyhash team !', fg = 'red')
+    Label1 = Label(Mafenetre, text = 'Map : Opéra', fg = 'red')
 
     # Positionnement du widget avec la méthode pack()
     Label1.pack()
 
     # Création du Canvas
-    Largeur = 550
-    Hauteur = 550
+    Largeur = 530
+    Hauteur = 700
     Canevas = Canvas(Mafenetre,width = Largeur, height =Hauteur)
-    item = Canevas.create_image(0,0,anchor=NW, image=photo)
+    #item = Canevas.create_image(0,0,anchor=NW, image=photo)
     Canevas.pack()
 
     # La méthode bind() permet de lier un événement avec une fonction :
@@ -110,4 +101,4 @@ if __name__ == '__main__':
     # Création d'un widget Button (bouton Effacer)
     Button(Mafenetre, text ='Effacer', command = Effacer).pack(side=LEFT,padx = 5,pady = 5)
 
-    Mafenetre.mainloop()
+    Mafenetre.mainloop()    #on coupe tout
