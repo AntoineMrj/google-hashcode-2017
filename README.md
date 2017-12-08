@@ -14,7 +14,7 @@ Romain ANDRIEUX<br/>
 
 Répartition des tâches
 -----------------------
-- Bastien JEAN: Lecture entête + écriture fichier sortie<br/>
+- Bastien JEAN: Lecture entête + création matrice + écriture fichier sortie<br/>
 - Guillaume POTIER: Algorithme placement routeurs<br/>
 - Arthur MILLET: Calcul cases couvertes + affichage graphique des routeurs<br/>
 - Antoine MARJAULT: Algorithme pour relier 2 routeurs<br/>
