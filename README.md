@@ -27,14 +27,14 @@ Stratégies mises en oeuvre
 2. Connexion des routeurs au backbone:<br/>
    Détermination de l'arbre couvrant minimum en utilisant l'algorithme de Prim<br/>
 
-|Placer routeurs | Temps d'éxécution |
+|Placer routeurs | Temps d'exécution |
 |----------------|:-----------------:|
 |charleston_road |6mn                |               
 |rue_de_londres  |50mn               |               
 |opera           |3h                 | 
 |lets_go_higher  |14h                | 
 
-|Relier routeurs | Temps d'éxécution |
+|Relier routeurs | Temps d'exécution |
 |----------------|:-----------------:|
 |charleston_road |1s                 |               
 |rue_de_londres  |20s                |               
