@@ -4,7 +4,7 @@ Pandiculation
 ===================
 Surfez sur un réseau wifi doté d'une couverture parfaite dans votre bar préféré!
 
-Les Barathoniens
+Equipe
 -----------------
 Antoine MARJAULT<br/>
 Arthur MILLET<br/>
